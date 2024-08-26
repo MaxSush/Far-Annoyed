@@ -56,7 +56,7 @@ Vec2& Ball::getCenter()
 	return center;
 }
 
-Vec2 Ball::getBallVel()
+Vec2 Ball::getBallVel() const
 {
 	return vel;
 }

@@ -25,11 +25,19 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brick( RectF(500.0f,500.0f,800.0f,600.0f) ,Colors::Blue ),
-	ball(Vec2(400.0f,300.0f), Vec2(200.0f, 200.0f)),
+	ball(Vec2(400.0f,470.0f), Vec2(300.0f, 300.0f)),
 	wall(0.0f,0.0f,gfx.ScreenWidth, gfx.ScreenHeight),
-	paddel(Vec2(400,500), 50,15)
+	pad(Vec2(400,500), 50,10),
+	soundpad(L"Sounds\\arkpad.wav")
 {
+	Color brickColor[5] = { Colors::Blue, Colors::Cyan, Colors::Green, Colors::Gray, Colors::Red };
+	Vec2 top_left(10.0f, 10.0f);
+	for (int x = 0; x < nBrickAcross; x++) {
+		for (int y = 0; y < nBrickDown; y++) {
+			const Color c = brickColor[y];
+			brick.emplace_back(Brick(RectF(top_left + Vec2(x * brickWidth, y * brickHeigth), brickWidth, brickHeigth), c));
+		}
+	}
 }
 
 void Game::Go()
@@ -43,35 +51,30 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const float dt = ft.Mark();
-	brick.doBallCollision(ball);
-	ball.Update(dt);
-	ball.doWallColision(wall);
-	// ballupdate();
-	
-	paddel.Update(wnd.kbd);
-	paddel.doWallCollision(wall);
-	paddel.doBallCollision(ball);
-}
 
-void Game::ballupdate()
-{
-	if (wnd.kbd.KeyIsPressed(VK_LEFT)) {
-		ball.getCenter().x -= 3;
+	pad.Update(wnd.kbd, dt);
+	pad.doWallCollision(wall);
+
+	ball.Update(dt);
+
+	for (auto& b : brick) {
+		if (b.doBallCollision(ball)) {
+			ball.Update(dt);
+			break;
+		}
 	}
-	if (wnd.kbd.KeyIsPressed(VK_RIGHT)) {
-		ball.getCenter().x += 3;
-	}	
-	if (wnd.kbd.KeyIsPressed(VK_UP)) {
-		ball.getCenter().y -= 3;
-	}	
-	if (wnd.kbd.KeyIsPressed(VK_DOWN)) {
-		ball.getCenter().y += 3;
+	if (pad.doBallCollision(ball)) {
+		soundpad.Play();
 	}
+
+	ball.doWallColision(wall);
 }
 
 void Game::ComposeFrame()
 {
-	brick.Draw(gfx);
+	for (const auto& b : brick) {
+		b.Draw(gfx);
+	}
 	ball.Draw(gfx);
-	paddel.Draw(gfx);
+	pad.Draw(gfx);
 }

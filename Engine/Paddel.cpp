@@ -1,6 +1,6 @@
 #include "Paddel.h"
 
-Paddel::Paddel(const Vec2& center, float halfWidth, float halfHeigth)
+Paddle::Paddle(const Vec2& center, float halfWidth, float halfHeigth)
 	:
 	center(center),
 	halfWidth(halfWidth),
@@ -8,23 +8,26 @@ Paddel::Paddel(const Vec2& center, float halfWidth, float halfHeigth)
 {
 }
 
-void Paddel::Draw(Graphics& gfx) const
+void Paddle::Draw(Graphics& gfx) const
 {
 	RectF rect = getRect();
+	gfx.DrawRect(rect, wingcolor);
+	rect.left += wingwidth;
+	rect.rigth -= wingwidth;
 	gfx.DrawRect(rect, c);
 }
 
-void Paddel::Update(const Keyboard& kbd)
+void Paddle::Update(const Keyboard& kbd, const float dt)
 {
 	if (kbd.KeyIsPressed(VK_LEFT)) {
-		center.x -= 5;
+		center.x -= speed * dt;
 	}
 	else if (kbd.KeyIsPressed(VK_RIGHT)) {
-		center.x += 5;
+		center.x += speed * dt;
 	}
 }
 
-void Paddel::doWallCollision(const RectF& wall)
+void Paddle::doWallCollision(const RectF& wall)
 {
 	RectF rect = getRect();
 	if (rect.left < wall.left) {
@@ -35,20 +38,16 @@ void Paddel::doWallCollision(const RectF& wall)
 	}
 }
 
-void Paddel::doBallCollision(Ball& ball) const
+bool Paddle::doBallCollision(Ball& ball) const
 {
-	RectF rect = getRect();
-	if (rect.isOverlappingWith(ball.getBallRect())) {
-		if (ball.getBallVel().x < 0) {
-			ball.reboundY();
-		}
-		else {
-			ball.reboundY();
-		}
+	if (ball.getBallVel().y > 0.0f && getRect().isOverlappingWith(ball.getBallRect())) {
+		ball.reboundY();
+		return true;
 	}
+	return false;
 }
 
-RectF Paddel::getRect() const
+RectF Paddle::getRect() const
 {
 	return RectF::getFromCenter(center, halfWidth, halfHeigth);
 }

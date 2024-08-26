@@ -11,7 +11,8 @@ Brick::Brick(const RectF pos, Color c)
 void Brick::Draw(Graphics& gfx) const
 {
 	if (!destroyed) {
-		gfx.DrawRect(pos, c);
+
+		gfx.DrawRect(pos.getRectOffset(offset), c);
 	}
 }
 

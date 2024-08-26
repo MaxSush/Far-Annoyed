@@ -27,6 +27,7 @@
 #include "Ball.h"
 #include "FrameTimer.h"
 #include "Paddel.h"
+#include "Sound.h"
 
 class Game
 {
@@ -38,7 +39,6 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel();
-	void ballupdate();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -47,10 +47,17 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	Brick brick;
+	float brickWidth = 50.0f;
+	float brickHeigth = 20.0f;
+	static constexpr int nBrickAcross = 15;
+	static constexpr int nBrickDown = 5;
+	static constexpr int totalBrick = nBrickAcross * nBrickDown;
+	std::vector<Brick> brick;
+
 	Ball ball;
 	FrameTimer ft;
 	RectF wall;
-	Paddel paddel;
+	Paddle pad;
+	Sound soundpad;
 	/********************************/
 };

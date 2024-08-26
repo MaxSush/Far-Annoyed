@@ -13,7 +13,7 @@ public:
 	void reboundY();
 	RectF getBallRect() const;
 	Vec2& getCenter();  // debug purpose
-	Vec2 getBallVel();
+	Vec2 getBallVel() const;
 private:
 	static constexpr float rad = 7.0f;
 	Vec2 center;
