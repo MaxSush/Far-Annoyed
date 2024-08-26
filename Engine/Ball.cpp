@@ -15,25 +15,33 @@ void Ball::Draw(Graphics& gfx) const
 
 bool Ball::doWallColision(const RectF& wall)
 {
-	RectF rect = getBallRect();
-	float dt = 0.0f;
-	if (rect.left < wall.left + dt) {
+	bool collided = false;
+	const RectF rect = getBallRect();
+	if (rect.left < wall.left)
+	{
 		center.x += wall.left - rect.left;
 		reboundX();
+		collided = true;
 	}
-	else if (rect.rigth > wall.rigth - dt) {
+	else if (rect.rigth > wall.rigth)
+	{
 		center.x -= rect.rigth - wall.rigth;
 		reboundX();
+		collided = true;
 	}
-	if (rect.top < wall.top + dt) {
+	if (rect.top < wall.top)
+	{
 		center.y += wall.top - rect.top;
 		reboundY();
+		collided = true;
 	}
-	else if (rect.bottom > wall.bottom - dt) {
+	else if (rect.bottom > wall.bottom)
+	{
 		center.y -= rect.bottom - wall.bottom;
 		reboundY();
+		collided = true;
 	}
-	return false;
+	return collided;
 }
 
 void Ball::reboundX()

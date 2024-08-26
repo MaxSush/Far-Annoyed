@@ -1,5 +1,6 @@
 #include "Brick.h"
 #include <assert.h>
+#include <cmath>
 
 Brick::Brick(const RectF pos, Color c)
 	:
@@ -16,12 +17,32 @@ void Brick::Draw(Graphics& gfx) const
 	}
 }
 
-bool Brick::doBallCollision(Ball& ball)
+bool Brick::checkBallCollision(const Ball& ball)
 {
-	if (!destroyed && pos.isOverlappingWith(ball.getBallRect())) {
+	return (!destroyed && pos.isOverlappingWith(ball.getBallRect()));
+
+}
+
+void Brick::ExecuteBallCollision(Ball& ball)
+{
+	assert(checkBallCollision(ball));
+	const Vec2 ballPos = ball.getCenter();
+	if (std::signbit(ball.getBallVel().x) == std::signbit((ballPos - GetCenter()).x))
+	{
 		ball.reboundY();
-		destroyed = true;
-		return true;
 	}
-	return false;
+	else if (ballPos.x >= pos.left && ballPos.x <= pos.rigth)
+	{
+		ball.reboundY();
+	}
+	else
+	{
+		ball.reboundX();
+	}
+	destroyed = true;
+}
+
+Vec2 Brick::GetCenter()
+{
+	return Vec2((pos.rigth + pos.left) / 2.0f, (pos.bottom + pos.top) / 2.0f);
 }
