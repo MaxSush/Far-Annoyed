@@ -21,9 +21,9 @@ RectF::RectF(const Vec2& top_left, float width, float heigth)
 {
 }
 
-RectF RectF::getFromCenter(const Vec2& center_pos, float radius)
+RectF RectF::getFromCenter(const Vec2& center_pos, float width, float heigth)
 {
-	Vec2 half(radius, radius);
+	Vec2 half(width, heigth);
 	return RectF(center_pos - half, center_pos + half);
 }
 

@@ -8,7 +8,7 @@ class Brick
 public:
 	Brick(const RectF pos, Color c);
 	void Draw(Graphics& gfx) const;
-	bool checkBallCollision(const Ball& ball) const;
+	bool doBallCollision(Ball& ball);
 private:
 	RectF pos;
 	Color c;

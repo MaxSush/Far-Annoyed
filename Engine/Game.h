@@ -26,6 +26,7 @@
 #include "Brick.h"
 #include "Ball.h"
 #include "FrameTimer.h"
+#include "Paddel.h"
 
 class Game
 {
@@ -37,6 +38,7 @@ public:
 private:
 	void ComposeFrame();
 	void UpdateModel();
+	void ballupdate();
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -49,5 +51,6 @@ private:
 	Ball ball;
 	FrameTimer ft;
 	RectF wall;
+	Paddel paddel;
 	/********************************/
 };

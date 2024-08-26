@@ -25,9 +25,10 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brick( RectF(100.0f,100.0f,200.0f,200.0f) ,Colors::Blue ),
-	ball(Vec2(400.0f,300.0f), Vec2(100.0f, 100.0f)),
-	wall(0.0f,0.0f,gfx.ScreenWidth, gfx.ScreenHeight)
+	brick( RectF(500.0f,500.0f,800.0f,600.0f) ,Colors::Blue ),
+	ball(Vec2(400.0f,300.0f), Vec2(200.0f, 200.0f)),
+	wall(0.0f,0.0f,gfx.ScreenWidth, gfx.ScreenHeight),
+	paddel(Vec2(400,500), 50,15)
 {
 }
 
@@ -42,15 +43,35 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	const float dt = ft.Mark();
+	brick.doBallCollision(ball);
 	ball.Update(dt);
-	bool x = ball.doWallColision(wall);
-	updateBrick();
+	ball.doWallColision(wall);
+	// ballupdate();
+	
+	paddel.Update(wnd.kbd);
+	paddel.doWallCollision(wall);
+	paddel.doBallCollision(ball);
+}
+
+void Game::ballupdate()
+{
+	if (wnd.kbd.KeyIsPressed(VK_LEFT)) {
+		ball.getCenter().x -= 3;
+	}
+	if (wnd.kbd.KeyIsPressed(VK_RIGHT)) {
+		ball.getCenter().x += 3;
+	}	
+	if (wnd.kbd.KeyIsPressed(VK_UP)) {
+		ball.getCenter().y -= 3;
+	}	
+	if (wnd.kbd.KeyIsPressed(VK_DOWN)) {
+		ball.getCenter().y += 3;
+	}
 }
 
 void Game::ComposeFrame()
 {
-	if (!brick.checkBallCollision(ball)) {
-		brick.Draw(gfx);
-	}
+	brick.Draw(gfx);
 	ball.Draw(gfx);
+	paddel.Draw(gfx);
 }

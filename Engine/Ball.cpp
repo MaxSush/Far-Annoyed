@@ -15,7 +15,7 @@ void Ball::Draw(Graphics& gfx) const
 
 bool Ball::doWallColision(const RectF& wall)
 {
-	RectF rect = getRect();
+	RectF rect = getBallRect();
 	float dt = 0.0f;
 	if (rect.left < wall.left + dt) {
 		center.x += wall.left - rect.left;
@@ -46,9 +46,19 @@ void Ball::reboundY()
 	vel.y = -vel.y;
 }
 
-RectF Ball::getRect() const
+RectF Ball::getBallRect() const
 {
-	return RectF::getFromCenter(center, rad);
+	return RectF::getFromCenter(center, rad, rad);
+}
+
+Vec2& Ball::getCenter()
+{
+	return center;
+}
+
+Vec2 Ball::getBallVel()
+{
+	return vel;
 }
 
 void Ball::Update(const float& dt)

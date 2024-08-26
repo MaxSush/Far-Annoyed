@@ -15,7 +15,12 @@ void Brick::Draw(Graphics& gfx) const
 	}
 }
 
-bool Brick::checkBallCollision(const Ball& ball) const
+bool Brick::doBallCollision(Ball& ball)
 {
-	return pos.isOverlappingWith(ball.getRect());
+	if (!destroyed && pos.isOverlappingWith(ball.getBallRect())) {
+		ball.reboundY();
+		destroyed = true;
+		return true;
+	}
+	return false;
 }
